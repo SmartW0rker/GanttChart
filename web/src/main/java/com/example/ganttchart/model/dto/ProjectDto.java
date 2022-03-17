@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 public class ProjectDto {
     private String name;
-    @OneToMany(mappedBy = "project")
     private List<TaskGroup> taskGroupList;
 
     public ProjectDto(String name, List<TaskGroup> taskGroupList) {

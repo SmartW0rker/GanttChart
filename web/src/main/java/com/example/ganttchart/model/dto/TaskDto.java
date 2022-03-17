@@ -24,11 +24,8 @@ public class TaskDto {
     private LocalDate endDate;   //date when task was finished
     private int percentComplete; //how much of the work is done in percents
     private int workingHours; //time spend for the task in hours
-    @ManyToOne
     private TaskGroup taskGroup;
-    @ManyToMany
     private List<Task> tasks;
-    @ManyToMany
     private List<Employee> employees;
 
     public TaskDto(String name, String description, ImportanceTask importanceTask, LocalDate startDate, LocalDate endDate, int percentComplete, int workingHours, TaskGroup taskGroup, List<Task> tasks, List<Employee> employees) {
