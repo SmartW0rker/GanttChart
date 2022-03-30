@@ -1,9 +1,14 @@
 package com.example.ganttchart.service.impl;
 
+import com.example.ganttchart.exceptions.ProjectNotFound;
 import com.example.ganttchart.exceptions.TaskGroupNotFound;
+import com.example.ganttchart.model.Project;
+import com.example.ganttchart.model.Task;
 import com.example.ganttchart.model.TaskGroup;
 import com.example.ganttchart.model.dto.TaskGroupDto;
+import com.example.ganttchart.repository.ProjectRepository;
 import com.example.ganttchart.repository.TaskGroupRepository;
+import com.example.ganttchart.repository.TaskRepository;
 import com.example.ganttchart.service.TaskGroupService;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +19,13 @@ import java.util.Optional;
 public class TaskGroupServiceImpl implements TaskGroupService {
 
     private final TaskGroupRepository taskGroupRepository;
+    private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
 
-    public TaskGroupServiceImpl(TaskGroupRepository taskGroupRepository) {
+    public TaskGroupServiceImpl(TaskGroupRepository taskGroupRepository, ProjectRepository projectRepository, TaskRepository taskRepository) {
         this.taskGroupRepository = taskGroupRepository;
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -40,11 +49,18 @@ public class TaskGroupServiceImpl implements TaskGroupService {
     public Optional<TaskGroup> edit(Long id, TaskGroupDto taskGroupDto) {
         TaskGroup taskGroup=taskGroupRepository.findById(id)
                 .orElseThrow(()->new TaskGroupNotFound(id));
-        taskGroup.setTasks(taskGroupDto.getTasks());
+        //find the Project
+        Project project=projectRepository.findById(taskGroupDto.getProjectId())
+                .orElseThrow(()->new ProjectNotFound(taskGroupDto.getProjectId()));
+        //find tasks
+        List<Task> tasks=taskRepository.findAllById(taskGroupDto.getTaskIds());
+
+
+        taskGroup.setTasks(tasks);
         taskGroup.setName(taskGroupDto.getName());
         taskGroup.setStart(taskGroupDto.getStart());
         taskGroup.setDeadLine(taskGroupDto.getDeadLine());
-        taskGroup.setProject(taskGroupDto.getProject());
+        taskGroup.setProject(project);
         return Optional.of(taskGroupRepository.save(taskGroup));
     }
 

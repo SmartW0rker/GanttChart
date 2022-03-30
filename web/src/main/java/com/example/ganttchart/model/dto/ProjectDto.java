@@ -10,15 +10,15 @@ import java.util.List;
 @Data
 public class ProjectDto {
     private String name;
-    private List<TaskGroup> taskGroupList;
+    private List<Long> taskGroupIds;
 
-    public ProjectDto(String name, List<TaskGroup> taskGroupList) {
+    public ProjectDto(String name, List<Long> taskGroupIds) {
         this.name = name;
-        this.taskGroupList = taskGroupList;
+        this.taskGroupIds = taskGroupIds;
     }
 
     public ProjectDto(String name) {
-        this.taskGroupList=new ArrayList<>();
+        this.taskGroupIds=new ArrayList<>();
         this.name = name;
     }
 

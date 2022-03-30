@@ -14,4 +14,7 @@ public interface TaskGroupRepository extends JpaRepository<TaskGroup,Long> {
 
     @Override
     Optional<TaskGroup> findById(Long aLong);
+
+    @Override
+    List<TaskGroup> findAllById(Iterable<Long> longs);
 }

@@ -2,8 +2,10 @@ package com.example.ganttchart.service.impl;
 
 import com.example.ganttchart.exceptions.ProjectNotFound;
 import com.example.ganttchart.model.Project;
+import com.example.ganttchart.model.TaskGroup;
 import com.example.ganttchart.model.dto.ProjectDto;
 import com.example.ganttchart.repository.ProjectRepository;
+import com.example.ganttchart.repository.TaskGroupRepository;
 import com.example.ganttchart.service.ProjectService;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,11 @@ import java.util.Optional;
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+    private final TaskGroupRepository taskGroupRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, TaskGroupRepository taskGroupRepository) {
         this.projectRepository = projectRepository;
+        this.taskGroupRepository = taskGroupRepository;
     }
 
     @Override
@@ -39,7 +43,8 @@ public class ProjectServiceImpl implements ProjectService {
         Project project=projectRepository.findById(id)
                 .orElseThrow(()->new ProjectNotFound(id));
         project.setName(projectDto.getName());
-        project.setTaskGroupList(projectDto.getTaskGroupList());
+        List<TaskGroup> taskGroupList=taskGroupRepository.findAllById(projectDto.getTaskGroupIds());
+        project.setTaskGroupList(taskGroupList);
         return Optional.of(projectRepository.save(project));
     }
 

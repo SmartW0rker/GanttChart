@@ -1,8 +1,14 @@
 package com.example.ganttchart.service.impl;
 
+import com.example.ganttchart.exceptions.TaskGroupNotFound;
 import com.example.ganttchart.exceptions.TaskNotFound;
+import com.example.ganttchart.model.Employee;
 import com.example.ganttchart.model.Task;
+import com.example.ganttchart.model.TaskGroup;
 import com.example.ganttchart.model.dto.TaskDto;
+import com.example.ganttchart.repository.EmployeeRepository;
+import com.example.ganttchart.repository.ProjectRepository;
+import com.example.ganttchart.repository.TaskGroupRepository;
 import com.example.ganttchart.repository.TaskRepository;
 import com.example.ganttchart.service.TaskService;
 import org.springframework.stereotype.Service;
@@ -13,9 +19,15 @@ import java.util.Optional;
 @Service
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final TaskGroupRepository taskGroupRepository;
+    private final ProjectRepository projectRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, TaskGroupRepository taskGroupRepository, ProjectRepository projectRepository, EmployeeRepository employeeRepository) {
         this.taskRepository = taskRepository;
+        this.taskGroupRepository = taskGroupRepository;
+        this.projectRepository = projectRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -38,17 +50,29 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Optional<Task> edit(Long id, TaskDto taskDto) {
+        //find task
         Task task=taskRepository.findById(id).orElseThrow(()->new TaskNotFound(id));
+
+        //find Task Group
+        TaskGroup taskGroup=taskGroupRepository.findById(taskDto.getTaskGroupId())
+                .orElseThrow(()->new TaskGroupNotFound(taskDto.getTaskGroupId()));
+
+        //find Tasks
+        List<Task> taskList=taskRepository.findAllById(taskDto.getTaskIds());
+
+        //find Employees
+        List<Employee> employeeList=employeeRepository.findAllById(taskDto.getEmployeeIds());
+
         task.setName(taskDto.getName());
         task.setDescription(taskDto.getDescription());
         task.setImportanceTask(taskDto.getImportanceTask());
-        task.setTasks(taskDto.getTasks());
+        task.setTasks(taskList);
         task.setWorkingHours(taskDto.getWorkingHours());
         task.setPercentComplete(taskDto.getPercentComplete());
-        task.setEmployees(taskDto.getEmployees());
+        task.setEmployees(employeeList);
         task.setStartDate(taskDto.getStartDate());
         task.setEndDate(taskDto.getEndDate());
-        task.setTaskGroup(taskDto.getTaskGroup());
+        task.setTaskGroup(taskGroup);
 
         return Optional.of(taskRepository.save(task));
     }

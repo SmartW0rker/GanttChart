@@ -14,4 +14,7 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     @Override
     Optional<Task> findById(Long aLong);
+
+    @Override
+    List<Task> findAllById(Iterable<Long> longs);
 }

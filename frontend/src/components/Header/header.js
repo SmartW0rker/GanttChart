@@ -5,7 +5,7 @@ const header = (props) => {
     return (
         <header>
             <nav className="navbar navbar-expand-md navbar-dark navbar-fixed bg-dark">
-                <a className="navbar-brand" href="/products">E-Shop Application</a>
+                <a className="navbar-brand" href="/products">Gantt Chart App</a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                         aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -20,6 +20,9 @@ const header = (props) => {
                         </li>
                         <li className="nav-item active">
                             <Link className={"nav-link"} to={"/taskGroups"}>Task Groups</Link>
+                        </li>
+                        <li className="nav-item active">
+                            <Link className={"nav-link"} to={"/tasks"}>Tasks</Link>
                         </li>
                     </ul>
                     <form className="form-inline mt-2 mt-md-0 ml-3">
