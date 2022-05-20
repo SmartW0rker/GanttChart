@@ -1,5 +1,7 @@
 package com.example.ganttchart.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,9 +18,11 @@ public class TaskGroup {
     private String name;
     private LocalDate start; //start of the taskGroup
     private LocalDate deadLine; // time that taskGroup need to be finished by
-    @OneToMany(mappedBy = "taskGroup")
+    @OneToMany(mappedBy = "taskGroup",fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Task> tasks; // task that are in this group
     @ManyToOne
+    @JsonBackReference
     private Project project;
 
     public TaskGroup(String name, LocalDate start, LocalDate deadLine, List<Task> tasks, Project project) {

@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import {Link} from "react-router-dom";
 
-const employees = (props) =>{
-    return (
+const taskGroups= (props)=> {
+    return(
         <div className={"container mm-4 mt-5"}>
             <div className={"row"}>
                 <div className={"table-responsive"}>
@@ -10,24 +10,26 @@ const employees = (props) =>{
                         <thead>
                         <tr>
                             <th scope={"col"}>Name</th>
-                            <th scope={"col"}>EmployeeType</th>
+                            <th scope={"col"}>Start Date</th>
+                            <th scope={"col"}>Dead line Date</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {props.employees.map((employee) => {
+                        {props.taskGroups.map((taskGroup) => {
                             return (
-                                <tr key={employee.id}>
-                                    <td>{employee.name}</td>
-                                    <td>{employee.employeeType}</td>
+                                <tr key={taskGroup.id}>
+                                    <td>{taskGroup.name}</td>
+                                    <td>{taskGroup.start}</td>
+                                    <td>{taskGroup.deadLine}</td>
                                     <td>
                                         <Link className={"btn btn-danger"}
-                                              onClick={() => props.onDelete(employee.id)}
-                                              to={`/employees`}>
+                                              onClick={() => props.onDelete(taskGroup.id)}
+                                              to={`/taskGroups`}>
                                             Delete
                                         </Link>
                                         <Link className={"btn btn-info mx-2"}
-                                              onClick={() => props.onEdit(employee.id)}
-                                              to={`/employees/edit/${employee.id}`}>
+                                              onClick={() => props.onEdit(taskGroup.id)}
+                                              to={`/taskGroups/edit/${taskGroup.id}`}>
                                             Edit
                                         </Link>
                                     </td>
@@ -40,14 +42,14 @@ const employees = (props) =>{
                 <div className="col mb-3">
                     <div className="row">
                         <div className="col-sm-12 col-md-12">
-                            <Link className={"btn btn-block btn-dark"} to={"/employees/add"}>Add new Employee</Link>
+                            <Link className={"btn btn-block btn-dark"} to={"/taskGroups/add"}>Add new Task Group</Link>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
+    )
 
-    );
 }
-export default employees;
+export default taskGroups;

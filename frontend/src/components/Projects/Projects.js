@@ -17,11 +17,7 @@ const projects= (props)=> {
                             return (
                                 <tr key={project.id}>
                                     <td>{project.name}</td>
-                                    {project.taskGroupList.map((element) => {
-                                        return(
-                                        <td>{element.name}</td>
-                                    )
-                                    })}
+                                    <td>{project.taskGroupList.length} </td>
                                     <td>
                                         <Link className={"btn btn-danger"}
                                               onClick={() => props.onDelete(project.id)}

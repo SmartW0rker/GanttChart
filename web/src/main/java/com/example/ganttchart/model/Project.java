@@ -1,5 +1,6 @@
 package com.example.ganttchart.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +14,8 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project",fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<TaskGroup> taskGroupList;
 
     public Project(String name, List<TaskGroup> taskGroupList) {

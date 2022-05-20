@@ -44,7 +44,12 @@ public class ProjectServiceImpl implements ProjectService {
                 .orElseThrow(()->new ProjectNotFound(id));
         project.setName(projectDto.getName());
         List<TaskGroup> taskGroupList=taskGroupRepository.findAllById(projectDto.getTaskGroupIds());
-        project.setTaskGroupList(taskGroupList);
+
+        taskGroupList.forEach(t->{
+            t.setProject(project);
+        });
+        taskGroupRepository.saveAll(taskGroupList);
+
         return Optional.of(projectRepository.save(project));
     }
 

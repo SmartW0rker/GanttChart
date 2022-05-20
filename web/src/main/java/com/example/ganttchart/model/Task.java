@@ -1,5 +1,6 @@
 package com.example.ganttchart.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Task {
     private int percentComplete; //how much of the work is done in percents
     private int workingHours; //time spend for the task in hours
     @ManyToOne
+    @JsonBackReference
     private TaskGroup taskGroup;
     @ManyToMany
     private List<Task> tasks;

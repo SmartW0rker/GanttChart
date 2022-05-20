@@ -12,6 +12,7 @@ import com.example.ganttchart.repository.TaskRepository;
 import com.example.ganttchart.service.TaskGroupService;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,19 +50,20 @@ public class TaskGroupServiceImpl implements TaskGroupService {
     public Optional<TaskGroup> edit(Long id, TaskGroupDto taskGroupDto) {
         TaskGroup taskGroup=taskGroupRepository.findById(id)
                 .orElseThrow(()->new TaskGroupNotFound(id));
-        //find the Project
-        Project project=projectRepository.findById(taskGroupDto.getProjectId())
-                .orElseThrow(()->new ProjectNotFound(taskGroupDto.getProjectId()));
         //find tasks
-        List<Task> tasks=taskRepository.findAllById(taskGroupDto.getTaskIds());
-
-
-        taskGroup.setTasks(tasks);
+        List<Task> tasks= new LinkedList<>();
+        if (taskGroupDto.getTaskIds()!=null) {
+            tasks = taskRepository.findAllById(taskGroupDto.getTaskIds());
+        }
         taskGroup.setName(taskGroupDto.getName());
         taskGroup.setStart(taskGroupDto.getStart());
         taskGroup.setDeadLine(taskGroupDto.getDeadLine());
-        taskGroup.setProject(project);
-        return Optional.of(taskGroupRepository.save(taskGroup));
+        TaskGroup taskGroupNew=taskGroupRepository.save(taskGroup);
+        tasks.forEach(task -> {
+            task.setTaskGroup(taskGroupNew);
+            taskRepository.save(task);
+        });
+        return Optional.of(taskGroupNew);
     }
 
     @Override
